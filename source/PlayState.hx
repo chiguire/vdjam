@@ -29,7 +29,8 @@ class PlayState extends FlxState
 {
 	public var backdrop : FlxBackdrop;
 	public var pollo : Pollo;
-	public var vigas : FlxTypedGroup<FlxZSprite>;
+	public var all_stuff : FlxTypedGroup<FlxZSprite>;
+	public var vigas : Array<Viga>;
 	public var boundaries : FlxGroup;
 	public var notifications : FlxTypedGroup<Notification>;
 	public var current_viga : Null<Viga>;
@@ -53,25 +54,27 @@ class PlayState extends FlxState
 		pollo = new Pollo(320, 10, 0);
 		pollo.makeGraphic(60, 60, FlxColor.RED);
 		
-		vigas = new FlxTypedGroup<FlxZSprite>();
+		vigas = new Array<Viga>();
+		all_stuff = new FlxTypedGroup<FlxZSprite>();
 		
 		for (i in 0...6)
 		{
 			var v = new Viga(210, i);
 			v.z_angle = i * 360.0 / 6;
-			vigas.add(v);
+			all_stuff.add(v);
 			
 			for (i in 0...4)
 			{
 				var rp = new Rostipollo((i + 1) * 250, 0);
 				rp.viga = v;
-				v.rostipollos.add(rp.tilemap);
-				vigas.add(rp);
+				v.rostipollos.add(rp);
+				all_stuff.add(rp);
 			}
+			vigas.push(v);
 		}
 		
-		vigas.add(pollo);
-		add(vigas);
+		all_stuff.add(pollo);
+		add(all_stuff);
 		
 		boundaries = new FlxGroup();
 		
@@ -121,14 +124,26 @@ class PlayState extends FlxState
 		
 		FlxG.collide(pollo, boundaries);
 		
+		for (v in vigas)
+		{
+			for (rp in v.rostipollos.members)
+			{
+				rp.allowCollisions = FlxObject.NONE;
+			}
+		}
+		
 		if (current_viga != null)
 		{
+			for (rp in current_viga.rostipollos.members)
+			{
+				rp.allowCollisions = FlxObject.ANY;
+			}
 			FlxG.collide(pollo, current_viga.rostipollos);
 		}
 		
 		if (!FlxG.keys.anyPressed(["DOWN", "S"]))
 		{
-			if (!FlxG.overlap(pollo, vigas, set_pollo_z, check_viga_collide))
+			if (!FlxG.overlap(pollo, all_stuff, set_pollo_z, check_viga_collide))
 			{
 				if (pollo.standing_on_viga_counter > 0)
 				{
@@ -151,7 +166,7 @@ class PlayState extends FlxState
 			FlxFlicker.flicker(pollo, 1);
 		}
 		
-		vigas.sort(FlxZSprite.byZ, FlxSort.ASCENDING);
+		all_stuff.sort(FlxZSprite.byZ, FlxSort.ASCENDING);
 	}	
 	
 	public function readInput()

@@ -12,19 +12,14 @@ import flixel.util.FlxColorUtil;
  */
 class Rostipollo extends FlxZSprite
 {
-	public var tilemap : FlxTilemapExt;
-	public var viga : Viga;
+	public var viga (default,set): Viga;
 
 	public function new(X:Float=0, Y:Float=0, ?SimpleGraphic:Dynamic) 
 	{
 		super(X, Y, 0, SimpleGraphic);
 		makeGraphic(105, 70, FlxColor.BROWN);
-		allowCollisions = FlxObject.NONE;
+		allowCollisions = FlxObject.ANY;
 		immovable = true;
-		tilemap = new FlxTilemapExt();
-		tilemap.loadMap("1,5,2\n3,5,4", AssetPaths.tilesetslopenontransparent__png, 35, 35);
-		tilemap.setSlopes([1], [2], [3], [4]);
-		tilemap.immovable = true;
 	}
 	
 	public override function update()
@@ -34,10 +29,15 @@ class Rostipollo extends FlxZSprite
 		if (viga != null)
 		{
 			z = viga.z + 0.01;
-			y = viga.y + viga.height / 2 - this.height / 2;
-			tilemap.y = y;
+			velocity.y = viga.velocity.y;
 		}
 		
 		color = FlxColorUtil.HSVtoARGB(0, 0, 0.65 + z/(2*Viga.RADIUS) * 0.35);
+	}
+	
+	public function set_viga(v:Viga)
+	{
+		y = v.y + v.height / 2 - this.height / 2;
+		return viga = v;
 	}
 }

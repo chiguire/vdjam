@@ -17,7 +17,7 @@ import flixel.util.FlxColorUtil;
  */
 class Viga extends FlxZSprite
 {
-	public var rostipollos : FlxTypedGroup<FlxTilemapExt>;
+	public var rostipollos : FlxTypedGroup<Rostipollo>;
 	public var base_y : Float;
 	public var z_angle(get, set) : Float;
 	private var _z_angle : Float;
@@ -31,7 +31,7 @@ class Viga extends FlxZSprite
 		allowCollisions = FlxObject.UP;
 		immovable = true;
 		
-		rostipollos = new FlxTypedGroup<FlxTilemapExt>();
+		rostipollos = new FlxTypedGroup<Rostipollo>();
 	}
 	
 	public function get_z_angle()
