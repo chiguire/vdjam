@@ -14,10 +14,10 @@ class Rostipollo extends FlxZSprite
 {
 	public var viga (default,set): Viga;
 
-	public function new(X:Float=0, Y:Float=0, ?SimpleGraphic:Dynamic) 
+	public function new(X:Float=0, Y:Float=0) 
 	{
-		super(X, Y, 0, SimpleGraphic);
-		makeGraphic(105, 70, FlxColor.BROWN);
+		super(X, Y, 0);
+		loadGraphic(AssetPaths.pollobstaculo__png, false);
 		allowCollisions = FlxObject.ANY;
 		immovable = true;
 	}
@@ -37,7 +37,7 @@ class Rostipollo extends FlxZSprite
 	
 	public function set_viga(v:Viga)
 	{
-		y = v.y + v.height / 2 - this.height / 2;
+		y = v.y + v.height / 2 - this.height / 2 - 10;
 		return viga = v;
 	}
 }

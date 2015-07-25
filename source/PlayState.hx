@@ -52,7 +52,6 @@ class PlayState extends FlxState
 		add(backdrop);
 		
 		pollo = new Pollo(320, 10, 0);
-		pollo.makeGraphic(60, 60, FlxColor.RED);
 		
 		vigas = new Array<Viga>();
 		all_stuff = new FlxTypedGroup<FlxZSprite>();
