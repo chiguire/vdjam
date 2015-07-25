@@ -19,7 +19,7 @@ class Pollo extends FlxZSprite
 		loadGraphic(AssetPaths.clotilde_tira__png, true, 77, 101);
 		animation.add("idle", [0, 1, 2], 5, true);
 		animation.add("run", [for (i in 3...28) i], 30, true);
-		animation.add("jump", [28, 29, 30, 31, 32], 30, true);
+		animation.add("jump", [28, 29, 30, 31, 32], 3, false);
 		animation.play("idle");
 		facing = FlxObject.LEFT;
 		setFacingFlip(FlxObject.LEFT, false, false);
@@ -40,7 +40,7 @@ class Pollo extends FlxZSprite
 			facing = FlxObject.LEFT;
 			animation.play("run");
 		}
-		else
+		else if (Math.abs(velocity.y) < 5)
 		{
 			animation.play("idle");
 		}

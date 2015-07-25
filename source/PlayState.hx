@@ -62,9 +62,9 @@ class PlayState extends FlxState
 			v.z_angle = i * 360.0 / 6;
 			all_stuff.add(v);
 			
-			for (i in 0...4)
+			for (i in 0...6)
 			{
-				var rp = new Rostipollo((i + 1) * 250, 0);
+				var rp = new Rostipollo((i + 1) * 260, 0);
 				rp.viga = v;
 				v.rostipollos.add(rp);
 				all_stuff.add(rp);
@@ -97,7 +97,7 @@ class PlayState extends FlxState
 		FlxG.cameras.reset(overlayCamera);
 		FlxG.worldBounds.set( -30, -300, FlxG.width * 3 + 60, FlxG.height + 300);
 		
-		//FlxG.watch.add(pollo, "velocity");
+		FlxG.watch.add(pollo, "velocity");
 		FlxG.watch.add(pollo, "standing_on_viga_counter");
 		//FlxG.watch.add(pollo, "is_standing_on_viga");
 		//FlxG.watch.add(pollo, "z");
@@ -122,7 +122,7 @@ class PlayState extends FlxState
 		pollo.acceleration.y = 300;
 		
 		FlxG.collide(pollo, boundaries);
-		
+		/*
 		for (v in vigas)
 		{
 			for (rp in v.rostipollos.members)
@@ -139,6 +139,7 @@ class PlayState extends FlxState
 			}
 			FlxG.collide(pollo, current_viga.rostipollos);
 		}
+		*/
 		
 		if (!FlxG.keys.anyPressed(["DOWN", "S"]))
 		{
@@ -176,6 +177,7 @@ class PlayState extends FlxState
 			pollo.velocity.y -= speed * 1;
 			pollo.is_standing_on_viga = false;
 			pollo.standing_on_viga_counter = 0;
+			pollo.jump();
 		}
 		
         pollo.velocity.x =

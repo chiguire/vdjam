@@ -18,7 +18,7 @@ class Rostipollo extends FlxZSprite
 	{
 		super(X, Y, 0);
 		loadGraphic(AssetPaths.pollobstaculo__png, false);
-		allowCollisions = FlxObject.ANY;
+		allowCollisions = FlxObject.NONE;
 		immovable = true;
 	}
 	
