@@ -16,6 +16,7 @@ import flixel.util.FlxColor;
 import flixel.util.FlxRandom;
 import flixel.util.FlxSort;
 import flixel.FlxCamera;
+import proto.Cocinero;
 import proto.FlxZSprite;
 import proto.Notification;
 import proto.Pollo;
@@ -34,6 +35,7 @@ class PlayState extends FlxState
 	public var boundaries : FlxGroup;
 	public var notifications : FlxTypedGroup<Notification>;
 	public var current_viga : Null<Viga>;
+	public var cocinero : Cocinero;
 	
 	public var preocupaciones : Array<String> = [
 		"Hey, pollo, ¿por qué escapas de tu destino?",
@@ -50,6 +52,9 @@ class PlayState extends FlxState
 		
 		backdrop = new FlxBackdrop(AssetPaths.backdrop__png, 1, 1, true, true);
 		add(backdrop);
+		
+		cocinero = new Cocinero(300, FlxG.height - 400);
+		add(cocinero);
 		
 		pollo = new Pollo(320, 10, 0);
 		
@@ -160,6 +165,8 @@ class PlayState extends FlxState
 				}
 			}
 		}
+		
+		cocinero.seek(pollo);
 		
 		readInput();
 		
