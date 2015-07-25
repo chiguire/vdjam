@@ -62,9 +62,13 @@ class PlayState extends FlxState
 			v.z_angle = i * 360.0 / 6;
 			all_stuff.add(v);
 			
-			for (i in 0...6)
+			for (j in 0...6)
 			{
-				var rp = new Rostipollo((i + 1) * 260, 0);
+				if (i == 3 && j == 3)
+				{
+					continue;
+				}
+				var rp = new Rostipollo((j + 1) * 260, 0);
 				rp.viga = v;
 				v.rostipollos.add(rp);
 				all_stuff.add(rp);
@@ -97,7 +101,7 @@ class PlayState extends FlxState
 		FlxG.cameras.reset(overlayCamera);
 		FlxG.worldBounds.set( -30, -300, FlxG.width * 3 + 60, FlxG.height + 300);
 		
-		FlxG.watch.add(pollo, "velocity");
+		//FlxG.watch.add(pollo, "velocity");
 		FlxG.watch.add(pollo, "standing_on_viga_counter");
 		//FlxG.watch.add(pollo, "is_standing_on_viga");
 		//FlxG.watch.add(pollo, "z");
@@ -184,7 +188,10 @@ class PlayState extends FlxState
             if (FlxG.keys.anyPressed(["LEFT", "A"])) -speed;
             else if (FlxG.keys.anyPressed(["RIGHT", "D"])) speed;
             else 0;
-			
+		
+		pollo.pressed_left = pollo.velocity.x > 0;
+		pollo.pressed_right = pollo.velocity.x < 0;
+		
 		if (FlxG.keys.anyJustPressed(["Z"]))
 		{
 			var n = cast(notifications.recycle(Notification, [], true, true), Notification);
@@ -210,14 +217,14 @@ class PlayState extends FlxState
 		{
 			p.z = v.z;
 			p.is_standing_on_viga = true;
-			p.standing_on_viga_counter = 7;
+			p.standing_on_viga_counter = 8;
 			current_viga = cast(v, Viga);
 		}
 		else if (Std.is(v, Rostipollo))
 		{
 			p.z = v.viga.z;
 			p.is_standing_on_viga = true;
-			p.standing_on_viga_counter = 7;
+			p.standing_on_viga_counter = 8;
 			current_viga = cast(v.viga, Viga);
 		}
 	}

@@ -11,6 +11,8 @@ class Pollo extends FlxZSprite
 {
 	public var is_standing_on_viga : Bool;
 	public var standing_on_viga_counter : Int = 0;
+	public var pressed_left : Bool = false;
+	public var pressed_right : Bool = false;
 
 	public function new(x:Float=0, y:Float=0, z:Float=0) 
 	{
@@ -30,17 +32,17 @@ class Pollo extends FlxZSprite
 	{
 		super.update();
 		
-		if (velocity.x < 0)
+		if (pressed_right)
 		{
 			facing = FlxObject.RIGHT;
 			animation.play("run");
 		}
-		else if (velocity.x > 0)
+		else if (pressed_left)
 		{
 			facing = FlxObject.LEFT;
 			animation.play("run");
 		}
-		else if (Math.abs(velocity.y) < 5)
+		else if (Math.abs(velocity.y) < 10)
 		{
 			animation.play("idle");
 		}
