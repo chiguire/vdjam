@@ -37,7 +37,7 @@ class Viga extends FlxZSprite
 	{
 		var v = FlxAngle.asRadians(value_degrees + 90);
 		y = base_y + RADIUS * Math.sin(v);
-		z = RADIUS * Math.cos(v);
+		z = RADIUS * Math.sin(v);
 		calculate_velocity(value_degrees);
 		return _z_angle = value_degrees;
 	}
@@ -50,7 +50,7 @@ class Viga extends FlxZSprite
 		if (_z_angle > 360) _z_angle -= 360;
 		
 		calculate_velocity(z_angle);
-		z = RADIUS * Math.cos(z_angle);
+		z = RADIUS * Math.cos(FlxAngle.asRadians(z_angle+90));
 		
 		if (z_angle < 180)
 		{

@@ -45,8 +45,11 @@ class PlayState extends FlxState
 		vigas.add(pollo);
 		add(vigas);
 		
-		FlxG.watch.add(pollo, "is_standing_on_viga");
-		FlxG.watch.add(pollo, "z");
+		FlxG.watch.add(pollo, "velocity");
+		FlxG.watch.add(pollo, "standing_on_viga_counter");
+		//FlxG.watch.add(pollo, "is_standing_on_viga");
+		//FlxG.watch.add(pollo, "z");
+		//FlxG.watch.add(vigas.members[0], "z");
 	}
 	
 	/**
@@ -64,16 +67,24 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 		super.update();
-		pollo.acceleration.y = 240;
+		pollo.acceleration.y = 300;
 		
-		readInput();
 		if (!FlxG.keys.anyPressed(["DOWN", "S"]))
 		{
 			if (!FlxG.overlap(pollo, vigas, set_pollo_z, check_viga_collide))
 			{
-				pollo.is_standing_on_viga = false;
+				if (pollo.standing_on_viga_counter > 0)
+				{
+					pollo.standing_on_viga_counter--;
+				}
+				else
+				{
+					pollo.is_standing_on_viga = false;
+				}
 			}
 		}
+		
+		readInput();
 		
 		if (pollo.y > FlxG.height + 100)
 		{
@@ -87,10 +98,11 @@ class PlayState extends FlxState
 	public function readInput()
     {
         var speed = 200;
-		if (FlxG.keys.anyJustPressed(["UP", "W"]))
+		if (FlxG.keys.anyJustPressed(["UP", "W"]) && pollo.is_standing_on_viga)
 		{
-			pollo.velocity.y = -speed * 20;
+			pollo.velocity.y = -speed * 1;
 			pollo.is_standing_on_viga = false;
+			pollo.standing_on_viga_counter = 0;
 		}
 		
         pollo.velocity.x =
@@ -108,9 +120,10 @@ class PlayState extends FlxState
         return FlxObject.separate(ObjA, ObjB);
     }
 	
-	public function set_pollo_z(pollo, viga)
+	public function set_pollo_z(p, v)
 	{
-		pollo.z = viga.z;
-		pollo.is_standing_on_viga = true;
+		p.z = v.z;
+		p.is_standing_on_viga = true;
+		p.standing_on_viga_counter = 7;
 	}
 }
