@@ -7,6 +7,7 @@ import flixel.FlxObject;
 import flixel.util.FlxPoint;
 import flixel.util.FlxSpriteUtil;
 import flixel.FlxG;
+import flixel.util.FlxColorUtil;
 
 /**
  * ...
@@ -23,7 +24,7 @@ class Viga extends FlxZSprite
 	{
 		super(0, 0, 0);
 		this.base_y = base_y;
-		makeGraphic(FlxG.width, 10, FlxColor.GRAY, true, "viga"+i);
+		makeGraphic(FlxG.width*3, 10, FlxColor.GRAY, true, "viga"+i);
 		allowCollisions = FlxObject.UP;
 		immovable = true;
 	}
@@ -52,14 +53,7 @@ class Viga extends FlxZSprite
 		calculate_velocity(z_angle);
 		z = RADIUS * Math.cos(FlxAngle.asRadians(z_angle+90));
 		
-		if (z_angle < 180)
-		{
-			FlxSpriteUtil.fill(this, 0xff505050);
-		}
-		else
-		{
-			FlxSpriteUtil.fill(this, FlxColor.GRAY);
-		}
+		color = FlxColorUtil.HSVtoARGB(0, 0, 0.65 + z/(2*RADIUS) * 0.35);
 	}
 	
 	

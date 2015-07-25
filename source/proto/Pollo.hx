@@ -1,5 +1,7 @@
 package proto;
 
+import flixel.util.FlxColorUtil;
+
 /**
  * ...
  * @author Ciro Duran
@@ -15,4 +17,10 @@ class Pollo extends FlxZSprite
 		is_standing_on_viga = false;
 	}
 	
+	public override function update()
+	{
+		super.update();
+		
+		color = FlxColorUtil.HSVtoARGB(0, 0, 0.65 + z/(2*Viga.RADIUS) * 0.35);
+	}
 }

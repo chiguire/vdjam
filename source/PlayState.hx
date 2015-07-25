@@ -1,5 +1,6 @@
 package;
 
+import flixel.addons.display.FlxBackdrop;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -11,6 +12,7 @@ import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
 import flixel.util.FlxColor;
 import flixel.util.FlxSort;
+import flixel.FlxCamera;
 import proto.FlxZSprite;
 import proto.Pollo;
 import proto.Viga;
@@ -20,8 +22,10 @@ import proto.Viga;
  */
 class PlayState extends FlxState
 {
+	public var backdrop : FlxBackdrop;
 	public var pollo : Pollo;
 	public var vigas : FlxTypedGroup<FlxZSprite>;
+	public var boundaries : FlxGroup;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -29,6 +33,9 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		super.create();
+		
+		backdrop = new FlxBackdrop(AssetPaths.backdrop__png, 1, 1, true, true);
+		add(backdrop);
 		
 		pollo = new Pollo(320, 10, 0);
 		pollo.makeGraphic(60, 60, FlxColor.RED);
@@ -45,7 +52,26 @@ class PlayState extends FlxState
 		vigas.add(pollo);
 		add(vigas);
 		
-		FlxG.watch.add(pollo, "velocity");
+		boundaries = new FlxGroup();
+		
+		var boundary = new FlxSprite( -30, -300);
+		boundary.makeGraphic(30, FlxG.height + 600, FlxColor.TRANSPARENT);
+		boundary.immovable = true;
+		boundaries.add(boundary);
+		
+		boundary = new FlxSprite( FlxG.width*3, -300);
+		boundary.makeGraphic(30, FlxG.height + 600, FlxColor.TRANSPARENT);
+		boundary.immovable = true;
+		boundaries.add(boundary);
+		add(boundaries);
+		
+		var overlayCamera = new FlxCamera(0, 0, FlxG.width, FlxG.height);
+		overlayCamera.setBounds(0, 0, FlxG.width*3, 480, false);
+		overlayCamera.follow(pollo, FlxCamera.STYLE_PLATFORMER, 1);
+		FlxG.cameras.reset(overlayCamera);
+		FlxG.worldBounds.set( -30, -300, FlxG.width * 3 + 60, FlxG.height + 300);
+		
+		//FlxG.watch.add(pollo, "velocity");
 		FlxG.watch.add(pollo, "standing_on_viga_counter");
 		//FlxG.watch.add(pollo, "is_standing_on_viga");
 		//FlxG.watch.add(pollo, "z");
@@ -68,6 +94,8 @@ class PlayState extends FlxState
 	{
 		super.update();
 		pollo.acceleration.y = 300;
+		
+		FlxG.collide(pollo, boundaries);
 		
 		if (!FlxG.keys.anyPressed(["DOWN", "S"]))
 		{
@@ -100,7 +128,7 @@ class PlayState extends FlxState
         var speed = 200;
 		if (FlxG.keys.anyJustPressed(["UP", "W"]) && pollo.is_standing_on_viga)
 		{
-			pollo.velocity.y = -speed * 1;
+			pollo.velocity.y -= speed * 1;
 			pollo.is_standing_on_viga = false;
 			pollo.standing_on_viga_counter = 0;
 		}
