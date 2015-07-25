@@ -12,12 +12,24 @@ import flixel.util.FlxMath;
  */
 class MenuState extends FlxState
 {
+	public var txt : FlxText;
+	public var txt2 : FlxText;
+	public var button : FlxButton;
+	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
 	override public function create():Void
 	{
 		super.create();
+		
+		txt = new FlxText(10, 10, 480, "VDJAM2015 - Pollos", 16, true);
+		txt2 = new FlxText(10, 40, 480, "Por: Ciro Durán (@chiguire) y Héctor Vargas (@Baha_Z). Julio 2015.", 8, true);
+		button = new FlxButton(10, 60, "Comenzar", play_handler);
+		
+		add(txt);
+		add(txt2);
+		add(button);
 	}
 	
 	/**
@@ -36,4 +48,9 @@ class MenuState extends FlxState
 	{
 		super.update();
 	}	
+	
+	public function play_handler()
+	{
+		FlxG.switchState(new PlayState());
+	}
 }
