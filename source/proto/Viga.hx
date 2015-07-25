@@ -1,6 +1,8 @@
 package proto;
 
+import flixel.addons.tile.FlxTilemapExt;
 import flixel.FlxSprite;
+import flixel.group.FlxTypedGroup;
 import flixel.util.FlxColor;
 import flixel.util.FlxAngle;
 import flixel.FlxObject;
@@ -15,6 +17,7 @@ import flixel.util.FlxColorUtil;
  */
 class Viga extends FlxZSprite
 {
+	public var rostipollos : FlxTypedGroup<FlxTilemapExt>;
 	public var base_y : Float;
 	public var z_angle(get, set) : Float;
 	private var _z_angle : Float;
@@ -27,6 +30,8 @@ class Viga extends FlxZSprite
 		makeGraphic(FlxG.width*3, 10, FlxColor.GRAY, true, "viga"+i);
 		allowCollisions = FlxObject.UP;
 		immovable = true;
+		
+		rostipollos = new FlxTypedGroup<FlxTilemapExt>();
 	}
 	
 	public function get_z_angle()

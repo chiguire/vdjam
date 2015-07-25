@@ -1,6 +1,7 @@
 package;
 
 import flixel.addons.display.FlxBackdrop;
+import flixel.addons.tile.FlxTilemapExt;
 import flixel.effects.FlxFlicker;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -18,6 +19,7 @@ import flixel.FlxCamera;
 import proto.FlxZSprite;
 import proto.Notification;
 import proto.Pollo;
+import proto.Rostipollo;
 import proto.Viga;
 
 /**
@@ -30,6 +32,7 @@ class PlayState extends FlxState
 	public var vigas : FlxTypedGroup<FlxZSprite>;
 	public var boundaries : FlxGroup;
 	public var notifications : FlxTypedGroup<Notification>;
+	public var current_viga : Null<Viga>;
 	
 	public var preocupaciones : Array<String> = [
 		"Hey, pollo, ¿por qué escapas de tu destino?",
@@ -57,6 +60,14 @@ class PlayState extends FlxState
 			var v = new Viga(210, i);
 			v.z_angle = i * 360.0 / 6;
 			vigas.add(v);
+			
+			for (i in 0...4)
+			{
+				var rp = new Rostipollo((i + 1) * 250, 0);
+				rp.viga = v;
+				v.rostipollos.add(rp.tilemap);
+				vigas.add(rp);
+			}
 		}
 		
 		vigas.add(pollo);
@@ -110,6 +121,11 @@ class PlayState extends FlxState
 		
 		FlxG.collide(pollo, boundaries);
 		
+		if (current_viga != null)
+		{
+			FlxG.collide(pollo, current_viga.rostipollos);
+		}
+		
 		if (!FlxG.keys.anyPressed(["DOWN", "S"]))
 		{
 			if (!FlxG.overlap(pollo, vigas, set_pollo_z, check_viga_collide))
@@ -121,6 +137,7 @@ class PlayState extends FlxState
 				else
 				{
 					pollo.is_standing_on_viga = false;
+					current_viga = null;
 				}
 			}
 		}
@@ -173,8 +190,19 @@ class PlayState extends FlxState
 	
 	public function set_pollo_z(p, v)
 	{
-		p.z = v.z;
-		p.is_standing_on_viga = true;
-		p.standing_on_viga_counter = 7;
+		if (Std.is(v, Viga))
+		{
+			p.z = v.z;
+			p.is_standing_on_viga = true;
+			p.standing_on_viga_counter = 7;
+			current_viga = cast(v, Viga);
+		}
+		else if (Std.is(v, Rostipollo))
+		{
+			p.z = v.viga.z;
+			p.is_standing_on_viga = true;
+			p.standing_on_viga_counter = 7;
+			current_viga = cast(v.viga, Viga);
+		}
 	}
 }
