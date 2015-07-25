@@ -1,6 +1,7 @@
 package;
 
 import flixel.addons.display.FlxBackdrop;
+import flixel.effects.FlxFlicker;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -11,9 +12,11 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
 import flixel.util.FlxColor;
+import flixel.util.FlxRandom;
 import flixel.util.FlxSort;
 import flixel.FlxCamera;
 import proto.FlxZSprite;
+import proto.Notification;
 import proto.Pollo;
 import proto.Viga;
 
@@ -26,6 +29,13 @@ class PlayState extends FlxState
 	public var pollo : Pollo;
 	public var vigas : FlxTypedGroup<FlxZSprite>;
 	public var boundaries : FlxGroup;
+	public var notifications : FlxTypedGroup<Notification>;
+	
+	public var preocupaciones : Array<String> = [
+		"Hey, pollo, ¿por qué escapas de tu destino?",
+		"¿Sabías que hace un minuto eras 100BsF más barato?",
+		"Pobre Pepito, él quería comer pollo y ahora no puede. Por tu culpa."
+	];
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -64,6 +74,9 @@ class PlayState extends FlxState
 		boundary.immovable = true;
 		boundaries.add(boundary);
 		add(boundaries);
+		
+		notifications = new FlxTypedGroup<Notification>();
+		add(notifications);
 		
 		var overlayCamera = new FlxCamera(0, 0, FlxG.width, FlxG.height);
 		overlayCamera.setBounds(0, 0, FlxG.width*3, 480, false);
@@ -118,6 +131,7 @@ class PlayState extends FlxState
 		{
 			pollo.y = 10;
 			FlxG.camera.flash();
+			FlxFlicker.flicker(pollo, 1);
 		}
 		
 		vigas.sort(FlxZSprite.byZ, FlxSort.ASCENDING);
@@ -137,6 +151,15 @@ class PlayState extends FlxState
             if (FlxG.keys.anyPressed(["LEFT", "A"])) -speed;
             else if (FlxG.keys.anyPressed(["RIGHT", "D"])) speed;
             else 0;
+			
+		if (FlxG.keys.anyJustPressed(["Z"]))
+		{
+			var n = cast(notifications.recycle(Notification, [], true, true), Notification);
+			n.x = FlxRandom.intRanged(20, FlxG.width - 320);
+			n.y = FlxRandom.intRanged(FlxG.height - 180, FlxG.height - 130);
+			n.set_text(FlxRandom.getObject(preocupaciones));
+			n.appear();
+		}
     }
 	
 	public function check_viga_collide(ObjA:Dynamic, ObjB:Dynamic):Bool
