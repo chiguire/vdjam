@@ -1,9 +1,11 @@
 package proto;
 
+import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.util.FlxColorUtil;
 import flixel.util.FlxPoint;
 import flixel.FlxSprite;
+import flixel.util.FlxRandom;
 import flixel.util.FlxVector;
 import flixel.util.FlxMath;
 
@@ -61,9 +63,40 @@ class Pollo extends FlxZSprite
 		animation.play("jump", true);
 	}
 	
+	private var direction : Int = 1;
 	public function move_by_yourself(target:FlxSprite)
 	{
-		var temp_force : FlxVector = FlxVector.get(0,0);
+		if (direction == 1)
+		{
+			if (x < FlxG.width * 3 - 200)
+			{
+				velocity.x = 200;
+			}
+			else
+			{
+				direction = -1;
+			}
+		}
+		else if (direction == -1)
+		{
+			if (x > 200)
+			{
+				velocity.x = -200;
+			}
+			else
+			{
+				direction = 1;
+			}
+		}
+		
+		if (standing_on_viga_counter > 0 && FlxRandom.float() > 0.5)
+		{
+			velocity.y -= 200;
+			is_standing_on_viga = false;
+			standing_on_viga_counter = 0;
+			jump();
+		}
+		/*var temp_force : FlxVector = FlxVector.get(0,0);
 		var temp_force2 = FlxVector.get(0,0);
 		_distance = FlxMath.distanceBetween(target, this);
 		
@@ -73,6 +106,6 @@ class Pollo extends FlxZSprite
 		
 		temp_force2.set(temp_force.x * max_speed.x, temp_force.y * max_speed.y).subtractPoint(velocity);
 		
-		acceleration.set(temp_force2.x, temp_force2.y);
+		acceleration.set(temp_force2.x, temp_force2.y);*/
 	}
 }

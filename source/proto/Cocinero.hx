@@ -67,12 +67,12 @@ class Cocinero extends FlxSpriteGroup
 		add(right_arm_3);
 	}
 	
-	public var l_sidearm_angle(default,set): Float = 40;
-	public var l_arm_angle(default,set): Float = -140;
+	public var l_sidearm_angle(default,set): Float = 44;
+	public var l_arm_angle(default,set): Float = -342;
 	public var l_knife_angle(default,set): Float = -30;
-	public var r_sidearm_angle(default,set): Float = -66;
-	public var r_arm_angle(default,set): Float = 122;
-	public var r_brush_angle(default,set): Float = 106;
+	public var r_sidearm_angle(default,set): Float = -28;
+	public var r_arm_angle(default,set): Float = -2;
+	public var r_brush_angle(default,set): Float = 60;
 	
 	public override function update()
 	{

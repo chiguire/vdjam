@@ -63,7 +63,14 @@ class PlayState extends FlxState
 	{
 		super.create();
 		
-		FlxG.sound.playMusic(AssetPaths.test__mp3, 0.6, true);
+		if (FlxRandom.intRanged(0, 1) == 0)
+		{
+			FlxG.sound.playMusic(AssetPaths.test__mp3, 0.6, true);
+		}
+		else
+		{
+			FlxG.sound.playMusic(AssetPaths.vdj__mp3, 0.6, true);
+		}
 		
 		backdrop = new FlxBackdrop(AssetPaths.kitchen__png, 0.84, 1, false, false);
 		add(backdrop);
@@ -118,11 +125,14 @@ class PlayState extends FlxState
 		notifications = new FlxTypedGroup<Notification>();
 		add(notifications);
 		
-		var help = new FlxSprite(0, 0, AssetPaths.help__png);
-		help.scrollFactor.set(0, 0);
-		help.x = FlxG.width - help.width;
-		help.y = 0;
-		//add(help);
+		if (Reg.tipo_juego == 1)
+		{
+			var help = new FlxSprite(0, 0, AssetPaths.help__png);
+			help.scrollFactor.set(0, 0);
+			help.x = FlxG.width - help.width;
+			help.y = 0;
+			add(help);
+		}
 		
 		var overlayCamera = new FlxCamera(0, 0, FlxG.width, FlxG.height);
 		overlayCamera.setBounds(0, 0, FlxG.width * 3, 480, false);
@@ -140,12 +150,15 @@ class PlayState extends FlxState
 		notification_timer = new FlxTimer(15, notification_handler, 0);
 		drop_timer = new FlxTimer(60, drop_handler, 0);
 		
-		FlxG.watch.add(cocinero, "l_sidearm_angle");
-		FlxG.watch.add(cocinero, "l_arm_angle");
-		FlxG.watch.add(cocinero, "l_knife_angle");
-		FlxG.watch.add(cocinero, "r_sidearm_angle");
-		FlxG.watch.add(cocinero, "r_arm_angle");
-		FlxG.watch.add(cocinero, "r_brush_angle");
+		//FlxG.watch.add(cocinero, "l_sidearm_angle");
+		//FlxG.watch.add(cocinero, "l_arm_angle");
+		//FlxG.watch.add(cocinero, "l_knife_angle");
+		//FlxG.watch.add(cocinero, "r_sidearm_angle");
+		//FlxG.watch.add(cocinero, "r_arm_angle");
+		//FlxG.watch.add(cocinero, "r_brush_angle");
+		FlxG.watch.add(pollo, "x");
+		FlxG.watch.add(pollo, "direction");
+		FlxG.watch.add(pollo.velocity, "x");
 	}
 	
 	/**

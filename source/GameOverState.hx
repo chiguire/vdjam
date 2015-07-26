@@ -38,7 +38,12 @@ class GameOverState extends FlxState
 		"Y el pollo que había en la mesa también se lo comió.",
 		"Hubo quién intentó refrigerarte para revenderte una semana después, pero ya no tenías tan buena apariencia.",
 		"Siempre me pregunté cómo hacían para servir puras patas de pollo en el comedor de la universidad.",
-		"Una linda parejita te llevó para cena romántica. Hicieron caballito en la moto y todo."
+		"Una linda parejita te llevó para cena romántica. Hicieron caballito en la moto y todo.",
+		"Supongo que ya no sabremos por qué cruzaste la calle.",
+		"Dos días después de que Pepito te comió ya valías el doble.",
+		"Después de 8 horas en cola para comprarte finalmente te tengo.",
+		"Compré medio cartón con tus hijos el otro día. Fueron un delicioso omelette.",
+		"Hice nuggets con tu esposa el otro día, ahora es tu turno.",
 	];
 	
 	public override function create()
