@@ -17,6 +17,7 @@ import flixel.util.FlxColor;
 import flixel.util.FlxRandom;
 import flixel.util.FlxSort;
 import flixel.FlxCamera;
+import flixel.util.FlxTimer;
 import proto.Cocinero;
 import proto.FlxZSprite;
 import proto.Notification;
@@ -39,6 +40,8 @@ class PlayState extends FlxState
 	public var current_viga : Null<Viga>;
 	public var cocinero : Cocinero;
 	public var fire : Fire;
+	public var notification_timer : FlxTimer;
+	public var drop_timer : FlxTimer;
 	
 	public var preocupaciones : Array<String> = [
 		"Hey, pollo, ¿por qué escapas de tu destino?",
@@ -118,18 +121,15 @@ class PlayState extends FlxState
 		FlxG.cameras.reset(overlayCamera);
 		FlxG.worldBounds.set( -30, -300, FlxG.width * 3 + 60, FlxG.height + 300);
 		
-		//FlxG.watch.add(pollo, "velocity");
-		//FlxG.watch.add(pollo, "standing_on_viga_counter");
-		//FlxG.watch.add(pollo, "is_standing_on_viga");
-		//FlxG.watch.add(pollo, "z");
-		//FlxG.watch.add(vigas.members[0], "z");
+		notification_timer = new FlxTimer(15, notification_handler, 0);
+		drop_timer = new FlxTimer(60, drop_handler, 0);
+		
 		FlxG.watch.add(cocinero, "l_sidearm_angle");
 		FlxG.watch.add(cocinero, "l_arm_angle");
 		FlxG.watch.add(cocinero, "l_knife_angle");
 		FlxG.watch.add(cocinero, "r_sidearm_angle");
 		FlxG.watch.add(cocinero, "r_arm_angle");
 		FlxG.watch.add(cocinero, "r_brush_angle");
-		FlxG.watch.add(cocinero, "_distance");
 	}
 	
 	/**
@@ -150,24 +150,6 @@ class PlayState extends FlxState
 		pollo.acceleration.y = 300;
 		
 		FlxG.collide(pollo, boundaries);
-		/*
-		for (v in vigas)
-		{
-			for (rp in v.rostipollos.members)
-			{
-				rp.allowCollisions = FlxObject.NONE;
-			}
-		}
-		
-		if (current_viga != null)
-		{
-			for (rp in current_viga.rostipollos.members)
-			{
-				rp.allowCollisions = FlxObject.ANY;
-			}
-			FlxG.collide(pollo, current_viga.rostipollos);
-		}
-		*/
 		
 		if (!FlxG.keys.anyPressed(["DOWN", "S"]))
 		{
@@ -182,6 +164,20 @@ class PlayState extends FlxState
 					pollo.is_standing_on_viga = false;
 					current_viga = null;
 				}
+			}
+		}
+		
+		for (v in vigas)
+		{
+			if (v.dropped && v.y > FlxG.height * 2)
+			{
+				for (rp in v.rostipollos)
+				{
+					rp.kill();
+				}
+				v.rostipollos.clear();
+				v.kill();
+				vigas.remove(v);
 			}
 		}
 		
@@ -221,11 +217,7 @@ class PlayState extends FlxState
 		
 		if (FlxG.keys.anyJustPressed(["Z"]))
 		{
-			var n = cast(notifications.recycle(Notification, [], true, true), Notification);
-			n.x = FlxRandom.intRanged(20, FlxG.width - 320);
-			n.y = FlxRandom.intRanged(FlxG.height - 180, FlxG.height - 130);
-			n.set_text(FlxRandom.getObject(preocupaciones));
-			n.appear();
+			
 		}
 		
 		cocinero.l_sidearm_angle += if (FlxG.keys.pressed.R) -2; else if (FlxG.keys.pressed.T) 2; else 0;
@@ -262,5 +254,36 @@ class PlayState extends FlxState
 			p.standing_on_viga_counter = 8;
 			current_viga = cast(v.viga, Viga);
 		}
+	}
+	
+	public function notification_handler(timer:FlxTimer)
+	{
+		var n = cast(notifications.recycle(Notification, [], true, true), Notification);
+		n.x = FlxRandom.intRanged(20, FlxG.width - 320);
+		n.y = FlxRandom.intRanged(FlxG.height - 180, FlxG.height - 130);
+		n.set_text(FlxRandom.getObject(preocupaciones));
+		n.appear();
+	}
+	
+	public function drop_handler(timer:FlxTimer)
+	{
+		var vigas_not_dropped = new Array<Viga>();
+		
+		for (v in vigas)
+		{
+			if (!v.dropped)
+			{
+				vigas_not_dropped.push(v);
+			}
+		}
+		
+		if (vigas_not_dropped.length == 1)
+		{
+			return;
+		}
+		
+		var v = FlxRandom.getObject(vigas);
+		
+		v.drop();
 	}
 }

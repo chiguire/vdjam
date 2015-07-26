@@ -23,6 +23,9 @@ class Viga extends FlxZSprite
 	private var _z_angle : Float;
 
 	public static var RADIUS : Float = 120;
+	
+	public var dropped : Bool = false;
+	
 	public function new(base_y:Float, i:Int) 
 	{
 		super(0, 0, 0);
@@ -52,11 +55,14 @@ class Viga extends FlxZSprite
 	{
 		super.update();
 		
-		_z_angle += 1;
-		if (_z_angle > 360) _z_angle -= 360;
-		
-		calculate_velocity(z_angle);
-		z = RADIUS * Math.cos(FlxAngle.asRadians(z_angle+90));
+		if (!dropped)
+		{
+			_z_angle += 1;
+			if (_z_angle > 360) _z_angle -= 360;
+			
+			calculate_velocity(z_angle);
+			z = RADIUS * Math.cos(FlxAngle.asRadians(z_angle+90));
+		}
 		
 		color = FlxColorUtil.HSVtoARGB(0, 0, 0.65 + z/(2*RADIUS) * 0.35);
 	}
@@ -66,5 +72,11 @@ class Viga extends FlxZSprite
 	{
 		var v = FlxAngle.asRadians(value+90);
 		velocity.y = RADIUS * Math.cos(v);
+	}
+	
+	public function drop()
+	{
+		dropped = true;
+		acceleration.y = 240;
 	}
 }

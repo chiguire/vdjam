@@ -30,6 +30,7 @@ class MenuState extends FlxState
 	public var txt2 : FlxText;
 	public var button : FlxButton;
 	public var button2 : FlxButton;
+	public var button3 : FlxButton;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -77,17 +78,19 @@ class MenuState extends FlxState
 		FlxTween.linearMotion(fg_fire2, -FlxG.width, 0, 0, 0, 20, true, { type: FlxTween.LOOPING } );
 		add(fg_fire2);
 		
-		txt = new FlxText(10, 50, 480, "La Culpa es de Clotilde\n(Blame Clotilde!)", 20, true);
+		txt = new FlxText(10, 50, 480, "La Culpa es de Clotilde\n(Blame Clotilde!)", 24, true);
 		
-		txt2 = new FlxText(10, 110, 480, "Por: Ciro Durán (@chiguire) y Héctor Vargas (@Baha_Z).\nJulio 2015.", 8, true);
+		txt2 = new FlxText(10, 115, 480, "Por: Ciro Durán y Héctor Vargas", 16, true);
 		
-		button = new FlxButton(10, 140, "Comenzar", play_handler);
-		button2 = new FlxButton(10, 170, "Créditos", null);
+		button = new FlxButton(10, 140, "Soy un pollo", chicken_handler);
+		button2 = new FlxButton(10, 170, "Créditos", credits_handler);
+		button3 = new FlxButton(100, 140, "Soy un chef", chef_handler);
 		
 		add(txt);
 		add(txt2);
 		add(button);
 		add(button2);
+		add(button3);
 	}
 	
 	/**
@@ -107,8 +110,20 @@ class MenuState extends FlxState
 		super.update();
 	}	
 	
-	public function play_handler()
+	public function chicken_handler()
 	{
+		Reg.tipo_juego = 0;
 		FlxG.switchState(new PlayState());
+	}
+	
+	public function chef_handler()
+	{
+		Reg.tipo_juego = 1;
+		FlxG.switchState(new PlayState());
+	}
+	
+	public function credits_handler()
+	{
+		FlxG.switchState(new CreditsState());
 	}
 }

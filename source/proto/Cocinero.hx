@@ -22,7 +22,7 @@ class Cocinero extends FlxSpriteGroup
 	private var right_arm_2 : FlxSprite;
 	private var right_arm_3 : FlxSprite;
 	public var _distance : Float;
-	public var max_speed : FlxPoint = FlxPoint.get(200, 0);
+	public var max_speed : FlxPoint = FlxPoint.get(150, 0);
 	
 	public function new(X:Float=0, Y:Float=0, MaxSize:Int=0) 
 	{
@@ -86,11 +86,11 @@ class Cocinero extends FlxSpriteGroup
 		left_arm_3.angle = l_sidearm + l_arm + l_knife;
 		
 		right_arm_1.angle = r_sidearm;
-		var v = FlxVector.get(0, right_arm_1.height - 20);
+		var v = FlxVector.get(0, right_arm_1.height - 30);
 		v.rotateByDegrees(r_sidearm);
 		
-		right_arm_2.x = right_arm_1.x + v.x;
-		right_arm_2.y = right_arm_1.y + v.y;
+		right_arm_2.x = right_arm_1.x + right_arm_1.origin.x + v.x - left_arm_2.origin.x;
+		right_arm_2.y = right_arm_1.y + right_arm_1.origin.y + v.y - left_arm_2.origin.y;
 		right_arm_2.angle = r_sidearm + r_arm;
 		
 		v = FlxVector.get(0, right_arm_2.height - 10);
@@ -118,7 +118,26 @@ class Cocinero extends FlxSpriteGroup
 	
 	public function ik_solve(target:FlxSprite)
 	{
+		l_arm_angle += solve_ik_solve(left_arm_2, target);
+		l_sidearm_angle += solve_ik_solve(left_arm_1, target);
+		r_brush_angle += solve_ik_solve(right_arm_3, target);
+		r_arm_angle += solve_ik_solve(right_arm_2, target);
+		r_sidearm_angle += solve_ik_solve(right_arm_1, target);
+	}
+	
+	private function solve_ik_solve(arm:FlxSprite, target:FlxSprite)
+	{
+		var v = FlxVector.get(0, arm.height - 20);
+		v.rotateByDegrees(arm.angle);
+		var v_p = FlxVector.get(v.x, v.y);
+		v_p.rotateByDegrees(90);
 		
+		var v_f = FlxVector.get((target.x + target.origin.x) - (arm.x + arm.origin.x + v.x),
+								(target.y + target.origin.y) - (arm.y + arm.origin.y + v.y));
+		
+		var dot_product = v_f.dotProdWithNormalizing(v_p);
+		
+		return dot_product*0.005;
 	}
 	
 	public function set_l_sidearm_angle(value:Float)
@@ -148,6 +167,6 @@ class Cocinero extends FlxSpriteGroup
 	
 	public function set_r_brush_angle(value:Float)
 	{
-		return r_brush_angle = FlxMath.bound(value, 52, 104);
+		return r_brush_angle = value; // FlxMath.bound(value, 52, 104);
 	}
 }
