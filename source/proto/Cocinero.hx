@@ -17,8 +17,10 @@ class Cocinero extends FlxSpriteGroup
 	private var body : FlxSprite;
 	private var left_arm_1 : FlxSprite;
 	private var left_arm_2 : FlxSprite;
+	private var left_arm_3 : FlxSprite;
 	private var right_arm_1 : FlxSprite;
 	private var right_arm_2 : FlxSprite;
+	private var right_arm_3 : FlxSprite;
 	private var _distance : Float;
 	public var max_speed : FlxPoint = FlxPoint.get(200, 0);
 	
@@ -26,29 +28,32 @@ class Cocinero extends FlxSpriteGroup
 	{
 		super(X, Y, MaxSize);
 		
-		body = new FlxSprite(0, 0);
-		body.makeGraphic(140, 400, FlxColor.CHARTREUSE);
+		body = new FlxSprite(0, 0, AssetPaths.chef_body__png);
 		add(body);
 		
-		left_arm_1 = new FlxSprite(-10, 60);
-		left_arm_1.makeGraphic(20, 80, FlxColor.BROWN);
-		left_arm_1.origin.set(10, 5);
+		left_arm_1 = new FlxSprite(59, 311, AssetPaths.chef_sidearm_L__png);
+		left_arm_1.origin.set(27, 31);
 		add(left_arm_1);
 		
-		left_arm_2 = new FlxSprite(-10, 135);
-		left_arm_2.makeGraphic(20, 80, FlxColor.CORAL);
-		left_arm_2.origin.set(10, 5);
+		left_arm_2 = new FlxSprite(59, 430, AssetPaths.chef_arm_L__png);
+		left_arm_2.origin.set(29, 20);
 		add(left_arm_2);
 		
-		right_arm_1 = new FlxSprite(130, 60);
-		right_arm_1.makeGraphic(20, 80, FlxColor.IVORY);
-		right_arm_1.origin.set(10, 5);
+		left_arm_3 = new FlxSprite(59, 530, AssetPaths.chef_knife_L__png);
+		left_arm_3.origin.set(30, 31);
+		add(left_arm_3);
+		
+		right_arm_1 = new FlxSprite(190, 311, AssetPaths.chef_sidearm_R__png);
+		right_arm_1.origin.set(24, 29);
 		add(right_arm_1);
 		
-		right_arm_2 = new FlxSprite(130, 135);
-		right_arm_2.makeGraphic(20, 80, FlxColor.KHAKI);
-		right_arm_2.origin.set(10, 5);
+		right_arm_2 = new FlxSprite(190, 430, AssetPaths.chef_arm_R__png);
+		right_arm_2.origin.set(20, 18);
 		add(right_arm_2);
+		
+		right_arm_3 = new FlxSprite(190, 530, AssetPaths.chef_brush_R__png);
+		right_arm_3.origin.set(29, 20);
+		add(right_arm_3);
 	}
 	
 	

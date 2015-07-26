@@ -22,6 +22,7 @@ import proto.Notification;
 import proto.Pollo;
 import proto.Rostipollo;
 import proto.Viga;
+import proto.Fire;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -36,6 +37,7 @@ class PlayState extends FlxState
 	public var notifications : FlxTypedGroup<Notification>;
 	public var current_viga : Null<Viga>;
 	public var cocinero : Cocinero;
+	public var fire : Fire;
 	
 	public var preocupaciones : Array<String> = [
 		"Hey, pollo, ¿por qué escapas de tu destino?",
@@ -50,10 +52,10 @@ class PlayState extends FlxState
 	{
 		super.create();
 		
-		backdrop = new FlxBackdrop(AssetPaths.backdrop__png, 1, 1, true, true);
+		backdrop = new FlxBackdrop(AssetPaths.kitchen__png, 0.84, 1, false, false);
 		add(backdrop);
 		
-		cocinero = new Cocinero(300, FlxG.height - 400);
+		cocinero = new Cocinero(300, 0);
 		add(cocinero);
 		
 		pollo = new Pollo(320, 10, 0);
@@ -61,15 +63,15 @@ class PlayState extends FlxState
 		vigas = new Array<Viga>();
 		all_stuff = new FlxTypedGroup<FlxZSprite>();
 		
-		for (i in 0...6)
+		for (i in 0...4)
 		{
 			var v = new Viga(210, i);
-			v.z_angle = i * 360.0 / 6;
+			v.z_angle = i * 360.0 / 4;
 			all_stuff.add(v);
 			
 			for (j in 0...6)
 			{
-				if (i == 3 && j == 3)
+				if (i == 2 && j == 0)
 				{
 					continue;
 				}
@@ -96,6 +98,9 @@ class PlayState extends FlxState
 		boundary.immovable = true;
 		boundaries.add(boundary);
 		add(boundaries);
+		
+		fire = new Fire();
+		add(fire);
 		
 		notifications = new FlxTypedGroup<Notification>();
 		add(notifications);
