@@ -9,6 +9,7 @@ import flixel.FlxState;
 import flixel.FlxObject;
 import flixel.group.FlxGroup;
 import flixel.group.FlxTypedGroup;
+import flixel.input.keyboard.FlxKey;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
@@ -212,6 +213,14 @@ class PlayState extends FlxState
 			n.set_text(FlxRandom.getObject(preocupaciones));
 			n.appear();
 		}
+		
+		cocinero.l_sidearm_angle += if (FlxG.keys.pressed.R) -1; else if (FlxG.keys.pressed.T) 1; else 0;
+		cocinero.l_arm_angle     += if (FlxG.keys.pressed.F) -1; else if (FlxG.keys.pressed.G) 1; else 0;
+		cocinero.l_knife_angle   += if (FlxG.keys.pressed.V) -1; else if (FlxG.keys.pressed.B) 1; else 0;
+		cocinero.r_sidearm_angle += if (FlxG.keys.pressed.Y) -1; else if (FlxG.keys.pressed.U) 1; else 0;
+		cocinero.r_arm_angle     += if (FlxG.keys.pressed.H) -1; else if (FlxG.keys.pressed.J) 1; else 0;
+		cocinero.r_brush_angle   += if (FlxG.keys.pressed.N) -1; else if (FlxG.keys.pressed.M) 1; else 0;
+		
     }
 	
 	public function check_viga_collide(ObjA:Dynamic, ObjB:Dynamic):Bool
