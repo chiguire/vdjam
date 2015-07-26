@@ -41,16 +41,16 @@ class Notification extends FlxSprite
 		alpha = 0;
 		visible = true;
 		exists = true;
-		trace("Start tween");
+		
 		FlxTween.tween(obj, { alpha: 1.0 }, 1, { complete: function(tween:FlxTween)
 		{
-			trace("End tween");
+			
 			timer.start(5, function(timer:FlxTimer)
 			{
-				trace("Start disappear");
+				
 				FlxTween.tween(obj, { alpha: 0.0 }, 1, { complete: function (tween:FlxTween)
 				{
-					trace("End disappear");
+					
 					visible = false;
 					kill();
 				}});

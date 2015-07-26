@@ -46,7 +46,14 @@ class PlayState extends FlxState
 	public var preocupaciones : Array<String> = [
 		"Hey, pollo, ¿por qué escapas de tu destino?",
 		"¿Sabías que hace un minuto eras 100BsF más barato?",
-		"Pobre Pepito, él quería comer pollo y ahora no puede. Por tu culpa."
+		"Pobre Pepito, él quería comer pollo y ahora no puede. Por tu culpa.",
+		"Sería más fácil bachaquearte si no tuvieses fecha de expiración.",
+		"Pónselo fácil al cocinero, mira que él también tiene que ganarse la vida.",
+		"Si el cocinero no trabaja no come. Si tú trabajas terminas comido.",
+		"¿Sabías que Almacén Don Manolo vende barat... bueno, precios una hora más baratos que en otros lados.",
+		"Eres un pollo asado único, como todos los demás.",
+		"¡Levántense, pollos, y anden conmigo en contra de la opresión humana alimenticia!",
+		"Jan es calvo"
 	];
 	
 	/**
@@ -56,10 +63,12 @@ class PlayState extends FlxState
 	{
 		super.create();
 		
+		FlxG.sound.playMusic(AssetPaths.test__mp3, 0.6, true);
+		
 		backdrop = new FlxBackdrop(AssetPaths.kitchen__png, 0.84, 1, false, false);
 		add(backdrop);
 		
-		cocinero = new Cocinero(300, 0);
+		cocinero = new Cocinero(FlxRandom.intRanged(500, FlxG.width*3), 0);
 		add(cocinero);
 		
 		pollo = new Pollo(320, 10, 0);
@@ -116,8 +125,15 @@ class PlayState extends FlxState
 		//add(help);
 		
 		var overlayCamera = new FlxCamera(0, 0, FlxG.width, FlxG.height);
-		overlayCamera.setBounds(0, 0, FlxG.width*3, 480, false);
-		overlayCamera.follow(pollo, FlxCamera.STYLE_PLATFORMER, 1);
+		overlayCamera.setBounds(0, 0, FlxG.width * 3, 480, false);
+		if (Reg.tipo_juego == 0)
+		{
+			overlayCamera.follow(pollo, FlxCamera.STYLE_PLATFORMER, 1);
+		}
+		else if (Reg.tipo_juego == 1)
+		{
+			overlayCamera.follow(cocinero.camera_hotspot, FlxCamera.STYLE_PLATFORMER, 1);
+		}
 		FlxG.cameras.reset(overlayCamera);
 		FlxG.worldBounds.set( -30, -300, FlxG.width * 3 + 60, FlxG.height + 300);
 		
@@ -150,6 +166,7 @@ class PlayState extends FlxState
 		pollo.acceleration.y = 300;
 		
 		FlxG.collide(pollo, boundaries);
+		FlxG.overlap(pollo, cocinero.knife_hotspot, null, gameover_handler);
 		
 		if (!FlxG.keys.anyPressed(["DOWN", "S"]))
 		{
@@ -182,7 +199,14 @@ class PlayState extends FlxState
 		}
 		
 		cocinero.seek(pollo);
-		cocinero.ik_solve(pollo);
+		if (Reg.tipo_juego == 0)
+		{
+			cocinero.ik_solve(pollo);
+		}
+		if (Reg.tipo_juego == 1)
+		{
+			pollo.move_by_yourself(cocinero);
+		}
 		
 		readInput();
 		
@@ -199,34 +223,34 @@ class PlayState extends FlxState
 	public function readInput()
     {
         var speed = 200;
-		if (FlxG.keys.anyJustPressed(["UP", "W"]) && pollo.is_standing_on_viga)
+		if (Reg.tipo_juego == 0)
 		{
-			pollo.velocity.y -= speed * 1;
-			pollo.is_standing_on_viga = false;
-			pollo.standing_on_viga_counter = 0;
-			pollo.jump();
-		}
-		
-        pollo.velocity.x =
-            if (FlxG.keys.anyPressed(["LEFT", "A"])) -speed;
-            else if (FlxG.keys.anyPressed(["RIGHT", "D"])) speed;
-            else 0;
-		
-		pollo.pressed_left = pollo.velocity.x > 0;
-		pollo.pressed_right = pollo.velocity.x < 0;
-		
-		if (FlxG.keys.anyJustPressed(["Z"]))
-		{
+			if (FlxG.keys.anyJustPressed(["UP", "W"]) && pollo.is_standing_on_viga)
+			{
+				pollo.velocity.y -= speed * 1;
+				pollo.is_standing_on_viga = false;
+				pollo.standing_on_viga_counter = 0;
+				pollo.jump();
+			}
 			
+			pollo.velocity.x =
+				if (FlxG.keys.anyPressed(["LEFT", "A"])) -speed;
+				else if (FlxG.keys.anyPressed(["RIGHT", "D"])) speed;
+				else 0;
+			
+			pollo.pressed_left = pollo.velocity.x > 0;
+			pollo.pressed_right = pollo.velocity.x < 0;
 		}
 		
-		cocinero.l_sidearm_angle += if (FlxG.keys.pressed.R) -2; else if (FlxG.keys.pressed.T) 2; else 0;
-		cocinero.l_arm_angle     += if (FlxG.keys.pressed.F) -2; else if (FlxG.keys.pressed.G) 2; else 0;
-		cocinero.l_knife_angle   += if (FlxG.keys.pressed.V) -2; else if (FlxG.keys.pressed.B) 2; else 0;
-		cocinero.r_sidearm_angle += if (FlxG.keys.pressed.Y) -2; else if (FlxG.keys.pressed.U) 2; else 0;
-		cocinero.r_arm_angle     += if (FlxG.keys.pressed.H) -2; else if (FlxG.keys.pressed.J) 2; else 0;
-		cocinero.r_brush_angle   += if (FlxG.keys.pressed.N) -2; else if (FlxG.keys.pressed.M) 2; else 0;
-		
+		if (Reg.tipo_juego == 1)
+		{
+			cocinero.l_sidearm_angle += if (FlxG.keys.pressed.R) -2; else if (FlxG.keys.pressed.T) 2; else 0;
+			cocinero.l_arm_angle     += if (FlxG.keys.pressed.F) -2; else if (FlxG.keys.pressed.G) 2; else 0;
+			cocinero.l_knife_angle   += if (FlxG.keys.pressed.V) -2; else if (FlxG.keys.pressed.B) 2; else 0;
+			cocinero.r_sidearm_angle += if (FlxG.keys.pressed.Y) -2; else if (FlxG.keys.pressed.U) 2; else 0;
+			cocinero.r_arm_angle     += if (FlxG.keys.pressed.H) -2; else if (FlxG.keys.pressed.J) 2; else 0;
+			cocinero.r_brush_angle   += if (FlxG.keys.pressed.N) -2; else if (FlxG.keys.pressed.M) 2; else 0;
+		}
     }
 	
 	public function check_viga_collide(ObjA:Dynamic, ObjB:Dynamic):Bool
@@ -285,5 +309,12 @@ class PlayState extends FlxState
 		var v = FlxRandom.getObject(vigas);
 		
 		v.drop();
+	}
+	
+	public function gameover_handler(a:Dynamic, b:Dynamic)
+	{
+		FlxG.sound.music.stop();
+		FlxG.switchState(new GameOverState());
+		return true;
 	}
 }

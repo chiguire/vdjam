@@ -2,6 +2,10 @@ package proto;
 
 import flixel.FlxObject;
 import flixel.util.FlxColorUtil;
+import flixel.util.FlxPoint;
+import flixel.FlxSprite;
+import flixel.util.FlxVector;
+import flixel.util.FlxMath;
 
 /**
  * ...
@@ -13,7 +17,9 @@ class Pollo extends FlxZSprite
 	public var standing_on_viga_counter : Int = 0;
 	public var pressed_left : Bool = false;
 	public var pressed_right : Bool = false;
-
+	public var _distance : Float;
+	public var max_speed : FlxPoint = FlxPoint.get(300, 0);
+	
 	public function new(x:Float=0, y:Float=0, z:Float=0) 
 	{
 		super(x, y, z);
@@ -53,5 +59,20 @@ class Pollo extends FlxZSprite
 	public function jump()
 	{
 		animation.play("jump", true);
+	}
+	
+	public function move_by_yourself(target:FlxSprite)
+	{
+		var temp_force : FlxVector = FlxVector.get(0,0);
+		var temp_force2 = FlxVector.get(0,0);
+		_distance = FlxMath.distanceBetween(target, this);
+		
+		temp_force.x = -(target.x + (target.width/2.0)) - (x + (this.width/2.0)); // desired velocity
+		temp_force.y = -(target.y + (target.width/2.0)) - (y + (this.width/2.0));
+		temp_force = temp_force.normalize();
+		
+		temp_force2.set(temp_force.x * max_speed.x, temp_force.y * max_speed.y).subtractPoint(velocity);
+		
+		acceleration.set(temp_force2.x, temp_force2.y);
 	}
 }

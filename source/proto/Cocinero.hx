@@ -21,6 +21,8 @@ class Cocinero extends FlxSpriteGroup
 	private var right_arm_1 : FlxSprite;
 	private var right_arm_2 : FlxSprite;
 	private var right_arm_3 : FlxSprite;
+	public var knife_hotspot : FlxSprite;
+	public var camera_hotspot : FlxSprite;
 	public var _distance : Float;
 	public var max_speed : FlxPoint = FlxPoint.get(150, 0);
 	
@@ -30,6 +32,10 @@ class Cocinero extends FlxSpriteGroup
 		
 		body = new FlxSprite(0, 0, AssetPaths.chef_body__png);
 		add(body);
+		
+		camera_hotspot = new FlxSprite(0, body.height);
+		camera_hotspot.makeGraphic(1, 1, FlxColor.TRANSPARENT);
+		add(camera_hotspot);
 		
 		left_arm_1 = new FlxSprite(30, 280, AssetPaths.chef_sidearm_L__png);
 		left_arm_1.origin.set(27, 31);
@@ -42,6 +48,11 @@ class Cocinero extends FlxSpriteGroup
 		left_arm_3 = new FlxSprite(30, 500, AssetPaths.chef_knife_L__png);
 		left_arm_3.origin.set(30, 31);
 		add(left_arm_3);
+		
+		knife_hotspot = new FlxSprite(30, 500);
+		knife_hotspot.makeGraphic(50, 50, FlxColor.TRANSPARENT);
+		knife_hotspot.centerOrigin();
+		add(knife_hotspot);
 		
 		right_arm_1 = new FlxSprite(160, 280, AssetPaths.chef_sidearm_R__png);
 		right_arm_1.origin.set(24, 29);
@@ -76,27 +87,32 @@ class Cocinero extends FlxSpriteGroup
 		v.rotateByDegrees(l_sidearm);
 		
 		left_arm_2.x = left_arm_1.x + left_arm_1.origin.x + v.x - left_arm_2.origin.x;
-		left_arm_2.y = left_arm_1.y + left_arm_1.origin.x + v.y - left_arm_2.origin.y;
+		left_arm_2.y = left_arm_1.y + left_arm_1.origin.y + v.y - left_arm_2.origin.y;
 		left_arm_2.angle = l_sidearm + l_arm;
 		
 		v = FlxVector.get(0, left_arm_2.height - 30);
 		v.rotateByDegrees(l_sidearm + l_arm);
-		left_arm_3.x = left_arm_2.x + v.x;
-		left_arm_3.y = left_arm_2.y + v.y;
+		left_arm_3.x = left_arm_2.x + left_arm_2.origin.x + v.x - left_arm_3.origin.x;
+		left_arm_3.y = left_arm_2.y + left_arm_2.origin.y + v.y - left_arm_3.origin.y;
 		left_arm_3.angle = l_sidearm + l_arm + l_knife;
+		
+		v = FlxVector.get(0, left_arm_3.height - 50);
+		v.rotateByDegrees(l_sidearm + l_arm + l_knife);
+		knife_hotspot.x = left_arm_3.x + left_arm_3.origin.x + v.x - knife_hotspot.origin.x;
+		knife_hotspot.y = left_arm_3.y + left_arm_3.origin.y + v.y - knife_hotspot.origin.y;
 		
 		right_arm_1.angle = r_sidearm;
 		var v = FlxVector.get(0, right_arm_1.height - 30);
 		v.rotateByDegrees(r_sidearm);
 		
-		right_arm_2.x = right_arm_1.x + right_arm_1.origin.x + v.x - left_arm_2.origin.x;
-		right_arm_2.y = right_arm_1.y + right_arm_1.origin.y + v.y - left_arm_2.origin.y;
+		right_arm_2.x = right_arm_1.x + right_arm_1.origin.x + v.x - right_arm_2.origin.x;
+		right_arm_2.y = right_arm_1.y + right_arm_1.origin.y + v.y - right_arm_2.origin.y;
 		right_arm_2.angle = r_sidearm + r_arm;
 		
 		v = FlxVector.get(0, right_arm_2.height - 10);
 		v.rotateByDegrees(r_sidearm + r_arm);
-		right_arm_3.x = right_arm_2.x + v.x;
-		right_arm_3.y = right_arm_2.y + v.y;
+		right_arm_3.x = right_arm_2.x + right_arm_2.origin.x + v.x - right_arm_3.origin.x;
+		right_arm_3.y = right_arm_2.y + right_arm_2.origin.y + v.y - right_arm_3.origin.y;
 		right_arm_3.angle = r_sidearm + r_arm + r_brush;
 		
 	}
@@ -142,31 +158,31 @@ class Cocinero extends FlxSpriteGroup
 	
 	public function set_l_sidearm_angle(value:Float)
 	{
-		return l_sidearm_angle = value; // FlxMath.bound(value, 18, 58);
+		return l_sidearm_angle = FlxMath.bound(value, 44, 190);
 	}
 	
 	public function set_l_arm_angle(value:Float)
 	{
-		return l_arm_angle = value; // FlxMath.bound(value, -158, -56);
+		return l_arm_angle = FlxMath.bound(value, -342, -200);
 	}
 	
 	public function set_l_knife_angle(value:Float)
 	{
-		return l_knife_angle = value; // FlxMath.bound(value, -124, -60);
+		return l_knife_angle = FlxMath.bound(value, -60, 60);
 	}
 	
 	public function set_r_sidearm_angle(value:Float)
 	{
-		return r_sidearm_angle = value; // FlxMath.bound(value, -66, -30);
+		return r_sidearm_angle = FlxMath.bound(value, -180, -16);
 	}
 	
 	public function set_r_arm_angle(value:Float)
 	{
-		return r_arm_angle = value; // FlxMath.bound(value, 16, 135);
+		return r_arm_angle = FlxMath.bound(value, -124, 0);
 	}
 	
 	public function set_r_brush_angle(value:Float)
 	{
-		return r_brush_angle = value; // FlxMath.bound(value, 52, 104);
+		return r_brush_angle = FlxMath.bound(value, -60, 60);
 	}
 }
