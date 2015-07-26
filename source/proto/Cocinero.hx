@@ -21,7 +21,7 @@ class Cocinero extends FlxSpriteGroup
 	private var right_arm_1 : FlxSprite;
 	private var right_arm_2 : FlxSprite;
 	private var right_arm_3 : FlxSprite;
-	private var _distance : Float;
+	public var _distance : Float;
 	public var max_speed : FlxPoint = FlxPoint.get(200, 0);
 	
 	public function new(X:Float=0, Y:Float=0, MaxSize:Int=0) 
@@ -56,12 +56,12 @@ class Cocinero extends FlxSpriteGroup
 		add(right_arm_3);
 	}
 	
-	public var l_sidearm_angle : Float = 0;
-	public var l_arm_angle : Float = 0;
-	public var l_knife_angle : Float = 0;
-	public var r_sidearm_angle : Float = 0;
-	public var r_arm_angle : Float = 0;
-	public var r_brush_angle : Float = 0;
+	public var l_sidearm_angle(default,set): Float = 40;
+	public var l_arm_angle(default,set): Float = -140;
+	public var l_knife_angle(default,set): Float = -30;
+	public var r_sidearm_angle(default,set): Float = -66;
+	public var r_arm_angle(default,set): Float = 122;
+	public var r_brush_angle(default,set): Float = 106;
 	
 	public override function update()
 	{
@@ -72,21 +72,21 @@ class Cocinero extends FlxSpriteGroup
 	public function set_arms_angles(l_sidearm:Float, l_arm:Float, l_knife:Float, r_sidearm:Float, r_arm:Float, r_brush:Float) //Degress
 	{
 		left_arm_1.angle = l_sidearm;
-		var v = FlxVector.get(0, left_arm_1.height - 10);
+		var v = FlxVector.get(0, left_arm_1.height - 30);
 		v.rotateByDegrees(l_sidearm);
 		
-		left_arm_2.x = left_arm_1.x + v.x;
-		left_arm_2.y = left_arm_1.y + v.y;
+		left_arm_2.x = left_arm_1.x + left_arm_1.origin.x + v.x - left_arm_2.origin.x;
+		left_arm_2.y = left_arm_1.y + left_arm_1.origin.x + v.y - left_arm_2.origin.y;
 		left_arm_2.angle = l_sidearm + l_arm;
 		
-		v = FlxVector.get(0, left_arm_2.height - 10);
+		v = FlxVector.get(0, left_arm_2.height - 30);
 		v.rotateByDegrees(l_sidearm + l_arm);
 		left_arm_3.x = left_arm_2.x + v.x;
 		left_arm_3.y = left_arm_2.y + v.y;
 		left_arm_3.angle = l_sidearm + l_arm + l_knife;
 		
 		right_arm_1.angle = r_sidearm;
-		var v = FlxVector.get(0, right_arm_1.height - 10);
+		var v = FlxVector.get(0, right_arm_1.height - 20);
 		v.rotateByDegrees(r_sidearm);
 		
 		right_arm_2.x = right_arm_1.x + v.x;
@@ -107,15 +107,47 @@ class Cocinero extends FlxSpriteGroup
 		var temp_force2 = FlxVector.get(0,0);
 		_distance = FlxMath.distanceBetween(target, this);
 		
-		if (_distance <= 300)
-		{
-			temp_force.x = (target.x + (target.width/2.0)) - (x + (this.width/2.0)); // desired velocity
-			temp_force.y = (target.y + (target.width/2.0)) - (y + (this.width/2.0));
-			temp_force = temp_force.normalize();
-			
-			temp_force2.set(temp_force.x * max_speed.x, temp_force.y * max_speed.y).subtractPoint(velocity);
-		}
+		temp_force.x = (target.x + (target.width/2.0)) - (x + (this.width/2.0)); // desired velocity
+		temp_force.y = (target.y + (target.width/2.0)) - (y + (this.width/2.0));
+		temp_force = temp_force.normalize();
+		
+		temp_force2.set(temp_force.x * max_speed.x, temp_force.y * max_speed.y).subtractPoint(velocity);
 		
 		acceleration.set(temp_force2.x, temp_force2.y);
+	}
+	
+	public function ik_solve(target:FlxSprite)
+	{
+		
+	}
+	
+	public function set_l_sidearm_angle(value:Float)
+	{
+		return l_sidearm_angle = value; // FlxMath.bound(value, 18, 58);
+	}
+	
+	public function set_l_arm_angle(value:Float)
+	{
+		return l_arm_angle = value; // FlxMath.bound(value, -158, -56);
+	}
+	
+	public function set_l_knife_angle(value:Float)
+	{
+		return l_knife_angle = value; // FlxMath.bound(value, -124, -60);
+	}
+	
+	public function set_r_sidearm_angle(value:Float)
+	{
+		return r_sidearm_angle = value; // FlxMath.bound(value, -66, -30);
+	}
+	
+	public function set_r_arm_angle(value:Float)
+	{
+		return r_arm_angle = value; // FlxMath.bound(value, 16, 135);
+	}
+	
+	public function set_r_brush_angle(value:Float)
+	{
+		return r_brush_angle = FlxMath.bound(value, 52, 104);
 	}
 }

@@ -106,6 +106,12 @@ class PlayState extends FlxState
 		notifications = new FlxTypedGroup<Notification>();
 		add(notifications);
 		
+		var help = new FlxSprite(0, 0, AssetPaths.help__png);
+		help.scrollFactor.set(0, 0);
+		help.x = FlxG.width - help.width;
+		help.y = 0;
+		//add(help);
+		
 		var overlayCamera = new FlxCamera(0, 0, FlxG.width, FlxG.height);
 		overlayCamera.setBounds(0, 0, FlxG.width*3, 480, false);
 		overlayCamera.follow(pollo, FlxCamera.STYLE_PLATFORMER, 1);
@@ -113,10 +119,17 @@ class PlayState extends FlxState
 		FlxG.worldBounds.set( -30, -300, FlxG.width * 3 + 60, FlxG.height + 300);
 		
 		//FlxG.watch.add(pollo, "velocity");
-		FlxG.watch.add(pollo, "standing_on_viga_counter");
+		//FlxG.watch.add(pollo, "standing_on_viga_counter");
 		//FlxG.watch.add(pollo, "is_standing_on_viga");
 		//FlxG.watch.add(pollo, "z");
 		//FlxG.watch.add(vigas.members[0], "z");
+		FlxG.watch.add(cocinero, "l_sidearm_angle");
+		FlxG.watch.add(cocinero, "l_arm_angle");
+		FlxG.watch.add(cocinero, "l_knife_angle");
+		FlxG.watch.add(cocinero, "r_sidearm_angle");
+		FlxG.watch.add(cocinero, "r_arm_angle");
+		FlxG.watch.add(cocinero, "r_brush_angle");
+		FlxG.watch.add(cocinero, "_distance");
 	}
 	
 	/**
@@ -173,6 +186,7 @@ class PlayState extends FlxState
 		}
 		
 		cocinero.seek(pollo);
+		cocinero.ik_solve(pollo);
 		
 		readInput();
 		
@@ -214,12 +228,12 @@ class PlayState extends FlxState
 			n.appear();
 		}
 		
-		cocinero.l_sidearm_angle += if (FlxG.keys.pressed.R) -1; else if (FlxG.keys.pressed.T) 1; else 0;
-		cocinero.l_arm_angle     += if (FlxG.keys.pressed.F) -1; else if (FlxG.keys.pressed.G) 1; else 0;
-		cocinero.l_knife_angle   += if (FlxG.keys.pressed.V) -1; else if (FlxG.keys.pressed.B) 1; else 0;
-		cocinero.r_sidearm_angle += if (FlxG.keys.pressed.Y) -1; else if (FlxG.keys.pressed.U) 1; else 0;
-		cocinero.r_arm_angle     += if (FlxG.keys.pressed.H) -1; else if (FlxG.keys.pressed.J) 1; else 0;
-		cocinero.r_brush_angle   += if (FlxG.keys.pressed.N) -1; else if (FlxG.keys.pressed.M) 1; else 0;
+		cocinero.l_sidearm_angle += if (FlxG.keys.pressed.R) -2; else if (FlxG.keys.pressed.T) 2; else 0;
+		cocinero.l_arm_angle     += if (FlxG.keys.pressed.F) -2; else if (FlxG.keys.pressed.G) 2; else 0;
+		cocinero.l_knife_angle   += if (FlxG.keys.pressed.V) -2; else if (FlxG.keys.pressed.B) 2; else 0;
+		cocinero.r_sidearm_angle += if (FlxG.keys.pressed.Y) -2; else if (FlxG.keys.pressed.U) 2; else 0;
+		cocinero.r_arm_angle     += if (FlxG.keys.pressed.H) -2; else if (FlxG.keys.pressed.J) 2; else 0;
+		cocinero.r_brush_angle   += if (FlxG.keys.pressed.N) -2; else if (FlxG.keys.pressed.M) 2; else 0;
 		
     }
 	
