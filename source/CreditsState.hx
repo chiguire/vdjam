@@ -34,7 +34,7 @@ class CreditsState extends FlxState
 		txt = new FlxText(103, 149, 400, "https://www.facebook.com/BahaComics\nTwitter: @Baha_Z", 12);
 		add(txt);
 		
-		txt = new FlxText(320, 30, 300, "Hector: Thanks for all the fish\nCiro: Siempre .Y. <3", 12);
+		txt = new FlxText(320, 30, 300, "Hector: para Bella. Always.\nCiro: Siempre .Y. <3", 12);
 		add(txt);
 		
 		txt = new FlxText(320, 70, 300, "Hecho para el Venezuela Duel Jam, por el equipo Johnnie Walker y Cocuy.\nBarquisimeto, Edo. Lara, Venezuela. Sutton, Surrey, Reino Unido. Julio 2015.", 12);
