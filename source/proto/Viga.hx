@@ -2,14 +2,13 @@ package proto;
 
 import flixel.addons.tile.FlxTilemapExt;
 import flixel.FlxSprite;
-import flixel.group.FlxTypedGroup;
+import flixel.group.FlxGroup;
 import flixel.util.FlxColor;
-import flixel.util.FlxAngle;
+import flixel.math.FlxAngle;
 import flixel.FlxObject;
-import flixel.util.FlxPoint;
+import flixel.math.FlxPoint;
 import flixel.util.FlxSpriteUtil;
 import flixel.FlxG;
-import flixel.util.FlxColorUtil;
 
 /**
  * ...
@@ -51,9 +50,9 @@ class Viga extends FlxZSprite
 		return _z_angle = value_degrees;
 	}
 	
-	public override function update()
+	public override function update(elapsed:Float)
 	{
-		super.update();
+		super.update(elapsed);
 		
 		if (!dropped)
 		{
@@ -64,7 +63,7 @@ class Viga extends FlxZSprite
 			z = RADIUS * Math.cos(FlxAngle.asRadians(z_angle+90));
 		}
 		
-		color = FlxColorUtil.HSVtoARGB(0, 0, 0.65 + z/(2*RADIUS) * 0.35);
+		color = FlxColor.fromHSB(0, 0, 0.65 + z/(2*RADIUS) * 0.35);
 	}
 	
 	

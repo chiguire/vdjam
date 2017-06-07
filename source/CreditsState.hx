@@ -46,9 +46,9 @@ class CreditsState extends FlxState
 		super.destroy();
 	}
 	
-	override public function update()
+	override public function update(elapsed:Float)
 	{
-		super.update();
+		super.update(elapsed);
 		
 		if (FlxG.mouse.justPressed || FlxG.keys.getIsDown().length > 0)
 		{

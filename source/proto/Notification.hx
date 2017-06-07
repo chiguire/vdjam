@@ -42,13 +42,13 @@ class Notification extends FlxSprite
 		visible = true;
 		exists = true;
 		
-		FlxTween.tween(obj, { alpha: 1.0 }, 1, { complete: function(tween:FlxTween)
+		FlxTween.tween(obj, { alpha: 1.0 }, 1, { onComplete: function(tween:FlxTween)
 		{
 			
 			timer.start(5, function(timer:FlxTimer)
 			{
 				
-				FlxTween.tween(obj, { alpha: 0.0 }, 1, { complete: function (tween:FlxTween)
+				FlxTween.tween(obj, { alpha: 0.0 }, 1, { onComplete: function (tween:FlxTween)
 				{
 					
 					visible = false;

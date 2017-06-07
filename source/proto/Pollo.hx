@@ -2,12 +2,12 @@ package proto;
 
 import flixel.FlxG;
 import flixel.FlxObject;
-import flixel.util.FlxColorUtil;
-import flixel.util.FlxPoint;
+import flixel.util.FlxColor;
+import flixel.math.FlxPoint;
 import flixel.FlxSprite;
-import flixel.util.FlxRandom;
-import flixel.util.FlxVector;
-import flixel.util.FlxMath;
+import flixel.math.FlxRandom;
+import flixel.math.FlxVector;
+import flixel.math.FlxMath;
 
 /**
  * ...
@@ -36,9 +36,9 @@ class Pollo extends FlxZSprite
 		setFacingFlip(FlxObject.RIGHT, true, false);
 	}
 	
-	public override function update()
+	public override function update(elapsed:Float)
 	{
-		super.update();
+		super.update(elapsed);
 		
 		if (pressed_right)
 		{
@@ -55,7 +55,7 @@ class Pollo extends FlxZSprite
 			animation.play("idle");
 		}
 		
-		color = FlxColorUtil.HSVtoARGB(0, 0, 0.65 + z/(2*Viga.RADIUS) * 0.35);
+		color = FlxColor.fromHSB(0, 0, 0.65 + z/(2*Viga.RADIUS) * 0.35);
 	}
 	
 	public function jump()
@@ -89,7 +89,7 @@ class Pollo extends FlxZSprite
 			}
 		}
 		
-		if (standing_on_viga_counter > 0 && FlxRandom.float() > 0.5)
+		if (standing_on_viga_counter > 0 && FlxG.random.float() > 0.5)
 		{
 			velocity.y -= 200;
 			is_standing_on_viga = false;

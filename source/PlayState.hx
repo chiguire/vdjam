@@ -8,13 +8,12 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.FlxObject;
 import flixel.group.FlxGroup;
-import flixel.group.FlxTypedGroup;
 import flixel.input.keyboard.FlxKey;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
-import flixel.util.FlxMath;
+import flixel.math.FlxMath;
 import flixel.util.FlxColor;
-import flixel.util.FlxRandom;
+import flixel.math.FlxRandom;
 import flixel.util.FlxSort;
 import flixel.FlxCamera;
 import flixel.util.FlxTimer;
@@ -63,7 +62,7 @@ class PlayState extends FlxState
 	{
 		super.create();
 		
-		if (FlxRandom.intRanged(0, 1) == 0)
+		if (FlxG.random.int(0, 1) == 0)
 		{
 			FlxG.sound.playMusic(AssetPaths.test__mp3, 0.6, true);
 		}
@@ -75,7 +74,7 @@ class PlayState extends FlxState
 		backdrop = new FlxBackdrop(AssetPaths.kitchen__png, 0.84, 1, false, false);
 		add(backdrop);
 		
-		cocinero = new Cocinero(FlxRandom.intRanged(500, FlxG.width*3), 0);
+		cocinero = new Cocinero(FlxG.random.int(500, FlxG.width*3), 0);
 		add(cocinero);
 		
 		pollo = new Pollo(320, 10, 0);
@@ -135,20 +134,22 @@ class PlayState extends FlxState
 		}
 		
 		var overlayCamera = new FlxCamera(0, 0, FlxG.width, FlxG.height);
-		overlayCamera.setBounds(0, 0, FlxG.width * 3, 480, false);
+		overlayCamera.setScrollBoundsRect(0, 0, FlxG.width * 3, 480, false);
 		if (Reg.tipo_juego == 0)
 		{
-			overlayCamera.follow(pollo, FlxCamera.STYLE_PLATFORMER, 1);
+			overlayCamera.follow(pollo, FlxCameraFollowStyle.PLATFORMER, 1);
 		}
 		else if (Reg.tipo_juego == 1)
 		{
-			overlayCamera.follow(cocinero.camera_hotspot, FlxCamera.STYLE_PLATFORMER, 1);
+			overlayCamera.follow(cocinero.camera_hotspot, FlxCameraFollowStyle.PLATFORMER, 1);
 		}
 		FlxG.cameras.reset(overlayCamera);
 		FlxG.worldBounds.set( -30, -300, FlxG.width * 3 + 60, FlxG.height + 300);
 		
-		notification_timer = new FlxTimer(15, notification_handler, 0);
-		drop_timer = new FlxTimer(60, drop_handler, 0);
+		notification_timer = new FlxTimer();
+		notification_timer.start(15, notification_handler, 0);
+		drop_timer = new FlxTimer();
+		drop_timer.start(60, drop_handler, 0);
 		
 		//FlxG.watch.add(cocinero, "l_sidearm_angle");
 		//FlxG.watch.add(cocinero, "l_arm_angle");
@@ -173,9 +174,9 @@ class PlayState extends FlxState
 	/**
 	 * Function that is called once every frame.
 	 */
-	override public function update():Void
+	override public function update(elapsed:Float):Void
 	{
-		super.update();
+		super.update(elapsed);
 		pollo.acceleration.y = 300;
 		
 		FlxG.collide(pollo, boundaries);
@@ -295,10 +296,10 @@ class PlayState extends FlxState
 	
 	public function notification_handler(timer:FlxTimer)
 	{
-		var n = cast(notifications.recycle(Notification, [], true, true), Notification);
-		n.x = FlxRandom.intRanged(20, FlxG.width - 320);
-		n.y = FlxRandom.intRanged(FlxG.height - 180, FlxG.height - 130);
-		n.set_text(FlxRandom.getObject(preocupaciones));
+		var n = cast(notifications.recycle(Notification, function () { return new Notification(); }, true, true), Notification);
+		n.x = FlxG.random.int(20, FlxG.width - 320);
+		n.y = FlxG.random.int(FlxG.height - 180, FlxG.height - 130);
+		n.set_text(FlxG.random.getObject(preocupaciones));
 		n.appear();
 	}
 	
@@ -319,7 +320,7 @@ class PlayState extends FlxState
 			return;
 		}
 		
-		var v = FlxRandom.getObject(vigas);
+		var v = FlxG.random.getObject(vigas);
 		
 		v.drop();
 	}

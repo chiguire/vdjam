@@ -4,7 +4,6 @@ import flixel.addons.tile.FlxTilemapExt;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
-import flixel.util.FlxColorUtil;
 
 /**
  * ...
@@ -22,9 +21,9 @@ class Rostipollo extends FlxZSprite
 		immovable = true;
 	}
 	
-	public override function update()
+	public override function update(elapsed:Float)
 	{
-		super.update();
+		super.update(elapsed);
 		
 		if (viga != null)
 		{
@@ -32,7 +31,7 @@ class Rostipollo extends FlxZSprite
 			velocity.y = viga.velocity.y;
 		}
 		
-		color = FlxColorUtil.HSVtoARGB(0, 0, 0.65 + z/(2*Viga.RADIUS) * 0.35);
+		color = FlxColor.fromHSB(0, 0, 0.65 + z/(2*Viga.RADIUS) * 0.35);
 	}
 	
 	public function set_viga(v:Viga)

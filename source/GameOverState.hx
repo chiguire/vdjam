@@ -5,8 +5,9 @@ import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
-import flixel.addons.effects.FlxWaveSprite;
-import flixel.util.FlxRandom;
+import flixel.addons.effects.chainable.FlxWaveEffect;
+import flixel.addons.effects.chainable.FlxEffectSprite;
+import flixel.math.FlxRandom;
 import flixel.util.FlxTimer;
 
 /**
@@ -16,14 +17,15 @@ import flixel.util.FlxTimer;
 class GameOverState extends FlxState
 {
 	public var bg_sprite : FlxSprite;
-	public var bg_fire1 : FlxWaveSprite;
-	public var bg_fire2 : FlxWaveSprite;
+	public var fire_effect : FlxWaveEffect;
+	public var bg_fire1 : FlxSprite; // : FlxEffectSprite;
+	public var bg_fire2 : FlxSprite; //: FlxEffectSprite;
 	public var chef : FlxSprite;
 	public var midground1 : FlxSprite;
 	public var midground2 : FlxSprite;
 	public var chicken : FlxSprite;
-	public var fg_fire1 : FlxWaveSprite;
-	public var fg_fire2 : FlxWaveSprite;
+	public var fg_fire1 : FlxSprite; //: FlxEffectSprite;
+	public var fg_fire2 : FlxSprite; //: FlxEffectSprite;
 	
 	public var timer : FlxTimer;
 	
@@ -54,15 +56,20 @@ class GameOverState extends FlxState
 		bg_sprite = new FlxSprite(0, 0, AssetPaths.title_background_mate__png);
 		add(bg_sprite);
 		
+		//fire_effect = new FlxWaveEffect(FlxWaveMode.ALL, 5, -1, 5);
 		var spr = new FlxSprite(0, 0, AssetPaths.title_background_flames__png);
-		bg_fire1 = new FlxWaveSprite(spr, WaveMode.ALL, 5, -1, 5);
+		bg_fire1 = spr; // new FlxEffectSprite(spr, [fire_effect]);
 		add(bg_fire1);
-		tweens.push(FlxTween.linearMotion(bg_fire1, 0, 0, FlxG.width, 0, 45, true, { type: FlxTween.LOOPING } ));
+		tweens.push(FlxTween.tween(bg_fire1, {x: FlxG.width}, 45, { type: FlxTween.LOOPING }));
+		tweens.push(FlxTween.tween(bg_fire1, {y: 10}, 1, { type: FlxTween.PINGPONG, ease: FlxEase.cubeInOut }));
+		//tweens.push(FlxTween.linearMotion(bg_fire1, 0, 0, FlxG.width, 0, 45, true, { type: FlxTween.LOOPING } ));
 		
 		spr = new FlxSprite(-FlxG.width, 0, AssetPaths.title_background_flames__png);
-		bg_fire2 = new FlxWaveSprite(spr, WaveMode.ALL, 5, -1, 5);
+		bg_fire2 = spr; //new FlxEffectSprite(spr, [fire_effect]);
 		add(bg_fire2);
-		tweens.push(FlxTween.linearMotion(bg_fire2, -FlxG.width, 0, 0, 0, 45, true, { type: FlxTween.LOOPING } ));
+		tweens.push(FlxTween.tween(bg_fire2, {x: 0}, 45, { type: FlxTween.LOOPING }));
+		tweens.push(FlxTween.tween(bg_fire2, {y: 10}, 1, { type: FlxTween.PINGPONG, ease: FlxEase.cubeInOut }));
+		//tweens.push(FlxTween.linearMotion(bg_fire2, -FlxG.width, 0, 0, 0, 45, true, { type: FlxTween.LOOPING } ));
 		
 		chef = new FlxSprite(0, 0, AssetPaths.title_chef__png);
 		add(chef);
@@ -83,13 +90,17 @@ class GameOverState extends FlxState
 		tweens.push(FlxTween.linearMotion(chicken, 0, 0, 80, 0, 2, true, { startDelay: 1, type: FlxTween.ONESHOT } ));
 		
 		spr = new FlxSprite(0, 0, AssetPaths.title_front_flames__png);
-		fg_fire1 = new FlxWaveSprite(spr, WaveMode.ALL, 5, -1, 5);
+		fg_fire1 = spr; //new FlxEffectSprite(spr, [fire_effect]);
 		add(fg_fire1);
-		tweens.push(FlxTween.linearMotion(fg_fire1, 0, 0, FlxG.width, 0, 20, true, { type: FlxTween.LOOPING } ));
+		tweens.push(FlxTween.tween(fg_fire1, {x: FlxG.width}, 45, { type: FlxTween.LOOPING }));
+		tweens.push(FlxTween.tween(fg_fire1, {y: 10}, 0.5, { type: FlxTween.PINGPONG, ease: FlxEase.cubeInOut }));
+		//tweens.push(FlxTween.linearMotion(fg_fire1, 0, 0, FlxG.width, 0, 20, true, { type: FlxTween.LOOPING } ));
 		
 		spr = new FlxSprite(-FlxG.width, 0, AssetPaths.title_front_flames__png);
-		fg_fire2 = new FlxWaveSprite(spr, WaveMode.ALL, 5, -1, 5);
-		tweens.push(FlxTween.linearMotion(fg_fire2, -FlxG.width, 0, 0, 0, 20, true, { type: FlxTween.LOOPING } ));
+		fg_fire2 = spr; //new FlxEffectSprite(spr, [fire_effect]);
+		tweens.push(FlxTween.tween(fg_fire2, {x: 0}, 45, { type: FlxTween.LOOPING }));
+		tweens.push(FlxTween.tween(fg_fire2, {y: 10}, 0.5, { type: FlxTween.PINGPONG, ease: FlxEase.cubeInOut }));
+		//tweens.push(FlxTween.linearMotion(fg_fire2, -FlxG.width, 0, 0, 0, 20, true, { type: FlxTween.LOOPING } ));
 		add(fg_fire2);
 		
 		screen = new FlxSprite(0, 0);
@@ -98,14 +109,15 @@ class GameOverState extends FlxState
 		screen.visible = false;
 		add(screen);
 		
-		txt = new FlxText((FlxG.width - 400) / 2, FlxG.height / 2, 400, FlxRandom.getObject(textos), 16);
+		txt = new FlxText((FlxG.width - 400) / 2, FlxG.height / 2, 400, FlxG.random.getObject(textos), 16);
 		txt.wordWrap = true;
 		txt.alignment = "center";
 		txt.alpha = 0;
 		txt.visible = false;
 		add(txt);
 		
-		timer = new FlxTimer(3, timer_handler, 1);
+		timer = new FlxTimer();
+		timer.start(3, timer_handler, 1);
 	}
 	
 	public function timer_handler(timer:FlxTimer)
@@ -114,19 +126,16 @@ class GameOverState extends FlxState
 		{
 			t.cancel();
 		}
-		bg_fire1.speed = 0;
-		bg_fire2.speed = 0;
-		fg_fire1.speed = 0;
-		fg_fire2.speed = 0;
+		//fire_effect.speed = 0;
 		screen.visible = true;
 		txt.visible = true;
 		FlxTween.tween(screen, { alpha: 0.6 }, 1);
 		FlxTween.tween(txt, { alpha: 1 }, 1);
 	}
 	
-	public override function update()
+	public override function update(elapsed:Float)
 	{
-		super.update();
+		super.update(elapsed);
 		
 		if (screen.visible && (FlxG.keys.getIsDown().length > 0 || FlxG.mouse.justPressed))
 		{

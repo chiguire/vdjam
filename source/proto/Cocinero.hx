@@ -4,9 +4,9 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxColor;
-import flixel.util.FlxMath;
-import flixel.util.FlxPoint;
-import flixel.util.FlxVector;
+import flixel.math.FlxMath;
+import flixel.math.FlxPoint;
+import flixel.math.FlxVector;
 
 /**
  * ...
@@ -74,9 +74,9 @@ class Cocinero extends FlxSpriteGroup
 	public var r_arm_angle(default,set): Float = -2;
 	public var r_brush_angle(default,set): Float = 60;
 	
-	public override function update()
+	public override function update(elapsed:Float)
 	{
-		super.update();
+		super.update(elapsed);
 		set_arms_angles(l_sidearm_angle, l_arm_angle, l_knife_angle, r_sidearm_angle, r_arm_angle, r_brush_angle);
 	}
 	
