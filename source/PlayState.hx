@@ -64,11 +64,11 @@ class PlayState extends FlxState
 		
 		if (FlxG.random.int(0, 1) == 0)
 		{
-			FlxG.sound.playMusic(AssetPaths.test__mp3, 0.6, true);
+			FlxG.sound.playMusic(AssetPaths.test__ogg, 0.6, true);
 		}
 		else
 		{
-			FlxG.sound.playMusic(AssetPaths.vdj__mp3, 0.6, true);
+			FlxG.sound.playMusic(AssetPaths.vdj__ogg, 0.6, true);
 		}
 		
 		backdrop = new FlxBackdrop(AssetPaths.kitchen__png, 0.84, 1, false, false);
